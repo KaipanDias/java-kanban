@@ -1,40 +1,36 @@
+package model;
+
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class Epic extends Task{
 
-    private ArrayList<Subtask> subtasks;
+    private final ArrayList<Subtask> subtasks;
     
     public Epic(String name, String description) {
         super(name, description);
-        ArrayList<Subtask> epicSubtasks = new ArrayList<>();
-        subtasks = epicSubtasks;
+        subtasks = new ArrayList<>();
     }
 
-    public Epic(String name, String description, ArrayList<Subtask> subtasks) {
-        super(name, description);
-        this.subtasks = subtasks;
-    }
-
-    public Epic(int id, String name, String description, Status status, ArrayList<Subtask> subtasks) {
+    public Epic(int id, String name, String description, Status status) {
         super(id, name, description, status);
-        this.subtasks = subtasks;
+        subtasks = new ArrayList<>();
+    }
+
+    public Epic(int id, String name, String description) {
+        super(id, name, description);
+        subtasks = new ArrayList<>();
     }
 
     public ArrayList<Subtask> getSubtasks() {
         return subtasks;
     }
 
-    public void setSubtasks(ArrayList<Subtask> subtasks) {
-        this.subtasks = subtasks;
-    }
-
     @Override
     public String toString() {
 
-        String result =  "Epic{" +
+        String result =  "Models.Epic{" +
                 "id='" + getId() + '\'' +
-                "name='" + getName() + '\'';
+                ", name='" + getName() + '\'';
 
         if (getDescription() != null) {
             result = result + ", description.length=" + getDescription().length() + '\'' +

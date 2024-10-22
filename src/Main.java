@@ -1,5 +1,10 @@
+import model.Epic;
+import model.Status;
+import model.Subtask;
+import model.Task;
+import service.TaskManager;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Main {
 
@@ -17,14 +22,8 @@ public class Main {
         ArrayList<Subtask> subtasks2 = new ArrayList<>();
         subtasks2.add(subtask3);
         Epic epic1 = new Epic("Эпик 1","Описание 1");
-        Epic epic2 = new Epic("Эпик 2", "Описание 1");
-
-        System.out.println(epic1);
-        System.out.println(epic2);
-        System.out.println(task1);
-        System.out.println(subtask1);
-        System.out.println(subtask2);
-        System.out.println(subtask3);
+        Epic epic2 = new Epic("Эпик 2", "Описание 3");
+        Epic epic3 = new Epic(3, "Эпик 3", "Описание 3", Status.DONE);
 
         taskManager.addNewTask(task1); // 1
         taskManager.addNewEpic(epic1); // 2
@@ -33,10 +32,10 @@ public class Main {
         taskManager.addNewSubtask(subtask2); // 5
         taskManager.addNewSubtask(subtask3); // 6
 
-
         System.out.println("all tasks " + taskManager.getTasks());
         System.out.println("all subtasks " + taskManager.getSubtasks());
-        System.out.println("all epics " + taskManager.getEpics());
+        System.out.println("all subtasks for Epic 1 " + taskManager.getAllEpicSubtasksById(2));
+
 
         Task task2 = new Task(1,"Задача 1", "Описание 1", Status.DONE);
         taskManager.updateTask(task2);
