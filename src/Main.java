@@ -35,16 +35,22 @@ public class Main {
         System.out.println("all tasks " + taskManager.getTasks());
         System.out.println("all subtasks " + taskManager.getSubtasks());
         System.out.println("all subtasks for Epic 1 " + taskManager.getAllEpicSubtasksById(2));
+        System.out.println("task 1 " + taskManager.getTaskById(1));
 
+        System.out.println("update subtask 3, subtasks: " + taskManager.getSubtaskById(4));
+        Subtask subtask4 = new Subtask(4,"Подзадача 1","Описание 1", Status.DONE,2);
+        taskManager.updateSubtask(subtask4);
+        System.out.println("update subtask 3, subtasks: " + taskManager.getSubtaskById(4));
+        System.out.println("update subtask 3, epics: " + taskManager.getEpicById(2));
+
+
+        System.out.println("all tasks " + taskManager.getTasks());
+        System.out.println("all subtasks " + taskManager.getSubtasks());
+        System.out.println("all subtasks for Epic 1 " + taskManager.getAllEpicSubtasksById(2));
 
         Task task2 = new Task(1,"Задача 1", "Описание 1", Status.DONE);
         taskManager.updateTask(task2);
         System.out.println("update task 1 " + taskManager.getTasks());
-
-        Subtask subtask4 = new Subtask(4,"Подзадача 1","Описание 1", Status.DONE,2);
-        taskManager.updateSubtask(subtask4);
-        System.out.println("update subtask 3, subtasks: " + taskManager.getSubtasks());
-        System.out.println("update subtask 3, epics: " + taskManager.getEpics());
 
         Subtask subtask5 = new Subtask(6,"Подзадача 3","Описание 3", Status.DONE,3);
         taskManager.updateSubtask(subtask5);
@@ -70,6 +76,7 @@ public class Main {
         System.out.println("delete all subtasks " + taskManager.getSubtasks());
         taskManager.deleteAllEpics();
         System.out.println("delete all epics " + taskManager.getEpics());
+
 
 
     }
