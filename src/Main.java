@@ -32,6 +32,7 @@ public class Main {
         taskManager.addNewSubtask(subtask2); // 5
         taskManager.addNewSubtask(subtask3); // 6
 
+
         System.out.println("all tasks " + taskManager.getTasks());
         System.out.println("all subtasks " + taskManager.getSubtasks());
         System.out.println("all subtasks for Epic 1 " + taskManager.getAllEpicSubtasksById(2));

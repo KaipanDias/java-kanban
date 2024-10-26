@@ -28,20 +28,20 @@ public class TaskManager {
     }
 
     public Task getTaskById(int id) {
-        return tasks.getOrDefault(id, null);
+        return tasks.get(id);
     }
 
     public Subtask getSubtaskById(int id) {
-        return subtasks.getOrDefault(id, null);
+        return subtasks.get(id);
     }
 
     public Epic getEpicById(int id) {
-        return epics.getOrDefault(id, null);
+        return epics.get(id);
     }
 
     public ArrayList<Subtask> getAllEpicSubtasksById(int id){
         if(!epics.containsKey(id)){
-            return null;
+            return new ArrayList<>();
         }
         Epic epicSubtasks = epics.get(id);
         return  new ArrayList<>(epicSubtasks.getSubtasks());
@@ -91,6 +91,9 @@ public class TaskManager {
     }
 
     private void deleteSubtasksByEpicId(int id) {
+        if (!epics.containsKey(id)){
+            return;
+        }
         Epic epic = epics.get(id);
         ArrayList<Subtask> oldSubtasks = epic.getSubtasks();
 
