@@ -4,44 +4,56 @@ import model.Epic;
 import model.Subtask;
 import model.Task;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public interface TaskManager {
+    //GET
+    ArrayList<Task> getTasks();
 
-    Task getTask(int id);
+    ArrayList<Subtask> getSubtasks();
 
-    Epic getEpic(int id);
+    ArrayList<Epic> getEpics();
 
-    Subtask getSubTask(int id);
+    Task getTaskById(int id);
 
-    void createTask(Task task);
+    Subtask getSubtaskById(int id);
 
-    void createEpic(Epic epic);
+    Epic getEpicById(int id);
 
-    void createSubTask(Subtask subTask);
+    ArrayList<Subtask> getAllEpicSubtasksById(int id);
 
-    void updateTask(Task task);
-
-    void updateEpic(Epic epic);
-
-    void updateSubTask(Subtask subTask);
-
-    void deleteTask(int id);
-
-    void deleteEpic(int id);
-
-    void deleteSubTask(int id);
-
-    List<Task> getTasks();
-
-    List<Epic> getEpics();
-
-    List<Subtask> getSubTasks();
-
+    //DELETE
     void deleteAllTasks();
+
+    void deleteAllSubtasks();
+
+    void clearEpicSubtasks();
 
     void deleteAllEpics();
 
-    void deleteAllSubTasks();
+    void deleteTaskById(int id);
 
+    void deleteSubtaskById(int id);
+
+    void deleteEpicById(int id);
+
+    void deleteSubtasksByEpicId(int id);
+
+    //ADD
+    int addNewTask(Task task);
+
+    Integer addNewSubtask(Subtask subtask);
+
+    void addSubtaskToEpic(Subtask subtask);
+
+    int addNewEpic(Epic epic);
+
+    //UPDATE
+    void updateTask(Task task);
+
+    void updateSubtask(Subtask subtask);
+
+    void updateEpic(Epic epic);
+
+    void updateEpicStatus(Epic epic);
 }
