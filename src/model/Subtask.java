@@ -20,9 +20,7 @@ public class Subtask extends Task {
         setStatus(Status.NEW);
     }
 
-    public Subtask(int epicId) {
-        this.epicId = epicId;
-    }
+
 
     public int getEpicId() {
         return epicId;

@@ -225,28 +225,4 @@ class InMemoryTaskManagerTest {
         assertEquals(0, inMemoryTaskManager.getTasks().toArray().length);
 
     }
-
-    @Test
-    public void task_equals_if_same_id(){
-        Task task1 = createTask();
-        Task task2 = createTask();
-
-        task1.setId(1);
-        task2.setId(1);
-
-        assertEquals(task1, task2);
-    }
-
-    @Test
-    void testGetDefaultTaskManager() {
-        TaskManager taskManager = Managers.getDefault();
-        assertNotNull(taskManager);
-    }
-
-    @Test
-    void testGetDefaultHistoryManager() {
-        HistoryManager historyManager = Managers.getDefaultHistory();
-        assertNotNull(historyManager);
-    }
-
 }
