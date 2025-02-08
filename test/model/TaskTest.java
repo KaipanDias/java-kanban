@@ -4,25 +4,15 @@ import managers.*;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.BeforeEach;
 
 class TaskTest {
     TaskManager inMemoryTaskManager;
     HistoryManager inMemoryHistoryManager;
-    int currentIdOfTask;
-
-    @BeforeEach
-    public void beforeEach() {
-        inMemoryHistoryManager = Managers.getDefaultHistory();
-        inMemoryTaskManager = Managers.getDefault();
-        currentIdOfTask = 0;
-    }
+    int currentIdOfTask = 0;
 
     public Task createTask() {
         currentIdOfTask++;
-        Task task = new Task(currentIdOfTask,"Task 1", "Task description 1");
-        inMemoryTaskManager.addNewTask(task);
-        return task;
+        return new Task(currentIdOfTask,"Task 1", "Task description 1");
     }
 
     @Test

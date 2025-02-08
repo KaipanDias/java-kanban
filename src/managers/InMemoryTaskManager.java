@@ -172,10 +172,7 @@ public class InMemoryTaskManager implements TaskManager {
         epics.get(epic.getId()).setDescription(epic.getDescription());
     }
 
-    @Override
-    public void updateEpicStatus(Epic epic){//Для ревьюера: Тут ругается на private, если это возможно прошу пропустить
-                                            //дальше, так как это мой последний шанс не быть отчисленным, к следующему
-                                            //спринту обязательно поправлю, если же нет такой опции я пойму и переделаю
+    private void updateEpicStatus(Epic epic){
         if(!epics.containsKey(epic.getId())){
             return;
         }

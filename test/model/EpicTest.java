@@ -1,30 +1,15 @@
 package model;
 
-import managers.HistoryManager;
-import managers.Managers;
-import managers.TaskManager;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class EpicTest {
-    TaskManager inMemoryTaskManager;
-    HistoryManager inMemoryHistoryManager;
-    int currentIdOfTask;
-
-    @BeforeEach
-    public void beforeEach() {
-        inMemoryHistoryManager = Managers.getDefaultHistory();
-        inMemoryTaskManager = Managers.getDefault();
-        currentIdOfTask = 0;
-    }
+    int currentIdOfTask= 0;
 
     public Epic createEpic() {
         currentIdOfTask++;
-        Epic epic = new Epic(currentIdOfTask, "Epic 1", "Epic description 1");
-        inMemoryTaskManager.addNewEpic(epic);
-        return epic;
+        return new Epic(currentIdOfTask, "Epic 1", "Epic description 1");
     }
 
     @Test
