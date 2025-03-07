@@ -8,6 +8,7 @@ import model.Task;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.List;
 
 public class InMemoryTaskManager implements TaskManager {
 
@@ -202,5 +203,10 @@ public class InMemoryTaskManager implements TaskManager {
             epic.setStatus(Status.IN_PROGRESS);
         }
 
+    }
+
+    @Override
+    public List<Task> getHistory(){
+        return historyManager.getHistory();
     }
 }
