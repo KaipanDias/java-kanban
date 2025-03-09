@@ -49,10 +49,15 @@ class InMemoryHistoryManagerTest {
     @Test
     public void should_add_task_to_history() {
         Task task = createTask();
+        Task task2 = createTask();
 
+
+        inMemoryTaskManager.getTaskById(task2.getId());
         inMemoryTaskManager.getTaskById(task.getId());
+        inMemoryTaskManager.getTaskById(task2.getId());
 
-        assertEquals(inMemoryTaskManager.getHistory().getLast(), task, "Задача не попала в историю");
+        assertEquals(inMemoryTaskManager.getHistory().getLast(), task2, "Задача не попала в историю");
+        assertNotEquals(inMemoryTaskManager.getHistory().getFirst(), task2, "Неправильный порядок просмотра истории");
     }
 
 
@@ -62,7 +67,7 @@ class InMemoryHistoryManagerTest {
 
         inMemoryTaskManager.getEpicById(epic.getId());
 
-        inMemoryHistoryManager.getHistory();
+        inMemoryTaskManager.getHistory();
         assertEquals(inMemoryTaskManager.getHistory().getLast(), epic, "Задача не попала в историю");
     }
 
@@ -119,4 +124,39 @@ class InMemoryHistoryManagerTest {
         assertArrayEquals(watchedHistory.toArray(), inMemoryTaskManager.getHistory().toArray());
     }
 
+    @Test
+    public void shouldRemoveFromHistory(){
+        Task task1 = createTask();
+        Task task2 = createTask();
+        Epic epic = createEpic();
+        Subtask subtask = createSubTask(epic);
+
+        inMemoryHistoryManager.add(task1);
+        inMemoryHistoryManager.add(task2);
+        inMemoryHistoryManager.add(epic);
+        inMemoryHistoryManager.add(subtask);
+
+        inMemoryHistoryManager.remove(task1.getId());
+        inMemoryHistoryManager.remove(subtask.getId());
+        inMemoryHistoryManager.remove(epic.getId());
+
+        assertFalse(inMemoryTaskManager.getHistory().contains(task1));
+        assertFalse(inMemoryTaskManager.getHistory().contains(subtask));
+        assertFalse(inMemoryTaskManager.getHistory().contains(epic));
+    }
+
+    @Test
+    public void historyDoesNotContainsDuplicates(){
+        Task task = createTask();
+        Task task1 = createTask();
+        Task task2 = createTask();
+
+        inMemoryHistoryManager.add(task);
+        inMemoryHistoryManager.add(task1);
+        inMemoryHistoryManager.add(task2);
+        inMemoryHistoryManager.add(task);
+
+
+        assertEquals(3, inMemoryHistoryManager.getHistory().size());
+    }
 }
