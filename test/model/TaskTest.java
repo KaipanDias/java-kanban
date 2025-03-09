@@ -12,11 +12,11 @@ class TaskTest {
 
     public Task createTask() {
         currentIdOfTask++;
-        return new Task(currentIdOfTask,"Task 1", "Task description 1");
+        return new Task(currentIdOfTask, "Task 1", "Task description 1");
     }
 
     @Test
-    public void task_equals_if_same_id(){
+    public void task_equals_if_same_id() {
         Task task1 = createTask();
         Task task2 = createTask();
 

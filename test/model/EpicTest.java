@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class EpicTest {
-    int currentIdOfTask= 0;
+    int currentIdOfTask = 0;
 
     public Epic createEpic() {
         currentIdOfTask++;
@@ -13,7 +13,7 @@ class EpicTest {
     }
 
     @Test
-    public void epic_equals_if_same_id(){
+    public void epic_equals_if_same_id() {
         Task epic1 = createEpic();
         Task epic2 = createEpic();
 

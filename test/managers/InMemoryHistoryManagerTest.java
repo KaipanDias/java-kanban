@@ -26,7 +26,7 @@ class InMemoryHistoryManagerTest {
 
     public Task createTask() {
         currentIdOfTask++;
-        Task task = new Task(currentIdOfTask,"Task 1", "Task description 1");
+        Task task = new Task(currentIdOfTask, "Task 1", "Task description 1");
         inMemoryTaskManager.addNewTask(task);
         return task;
     }
@@ -40,7 +40,7 @@ class InMemoryHistoryManagerTest {
 
     public Subtask createSubTask(Epic epic) {
         currentIdOfTask++;
-        Subtask subTask = new Subtask(currentIdOfTask, "SubTask 1", "SubTask description 1", epic.getStatus(),epic.getId());
+        Subtask subTask = new Subtask(currentIdOfTask, "SubTask 1", "SubTask description 1", epic.getStatus(), epic.getId());
         inMemoryTaskManager.addNewSubtask(subTask);
 
         return subTask;
@@ -112,7 +112,7 @@ class InMemoryHistoryManagerTest {
         ArrayList<Task> watchedHistory = new ArrayList<>();
 
 
-        for(int i = 0; i < 10; i++){
+        for (int i = 0; i < 10; i++) {
             inMemoryTaskManager.getTaskById(task.getId());
             inMemoryTaskManager.getEpicById(epic.getId());
             inMemoryTaskManager.getSubtaskById(subTask.getId());
@@ -125,7 +125,7 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    public void shouldRemoveFromHistory(){
+    public void shouldRemoveFromHistory() {
         Task task1 = createTask();
         Task task2 = createTask();
         Epic epic = createEpic();
@@ -146,7 +146,7 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    public void historyDoesNotContainsDuplicates(){
+    public void historyDoesNotContainsDuplicates() {
         Task task = createTask();
         Task task1 = createTask();
         Task task2 = createTask();

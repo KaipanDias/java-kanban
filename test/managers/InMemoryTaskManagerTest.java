@@ -25,7 +25,7 @@ class InMemoryTaskManagerTest {
 
     public Task createTask() {
         currentIdOfTask++;
-        Task task = new Task(currentIdOfTask,"Task 1", "Task description 1");
+        Task task = new Task(currentIdOfTask, "Task 1", "Task description 1");
         inMemoryTaskManager.addNewTask(task);
         return task;
     }
@@ -39,7 +39,7 @@ class InMemoryTaskManagerTest {
 
     public Subtask createSubTask(Epic epic) {
         currentIdOfTask++;
-        Subtask subTask = new Subtask(currentIdOfTask, "SubTask 1", "SubTask description 1", epic.getStatus(),epic.getId());
+        Subtask subTask = new Subtask(currentIdOfTask, "SubTask 1", "SubTask description 1", epic.getStatus(), epic.getId());
         inMemoryTaskManager.addNewSubtask(subTask);
 
         return subTask;
@@ -227,7 +227,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void subtasksShouldNotContainDeletedSubtaskIs(){//Удаляемые подзадачи не должны хранить внутри себя старые id.
+    public void subtasksShouldNotContainDeletedSubtaskIs() {//Удаляемые подзадачи не должны хранить внутри себя старые id.
         Epic epic = createEpic();
         Subtask subtask1 = createSubTask(epic);
         Subtask subtask2 = createSubTask(epic);
@@ -240,7 +240,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void epicShouldNotContainDeletedSubtaskId(){//Внутри эпиков не должно оставаться неактуальных id подзадач.
+    public void epicShouldNotContainDeletedSubtaskId() {//Внутри эпиков не должно оставаться неактуальных id подзадач.
         Epic epic = createEpic();
         Subtask subtask1 = createSubTask(epic);
         Subtask subtask2 = createSubTask(epic);
