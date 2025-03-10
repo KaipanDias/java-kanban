@@ -121,7 +121,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteEpicById(int id) {
-        if(!epics.containsKey(id)){
+        if (!epics.containsKey(id)) {
             return;
         }
         Epic epic = epics.get(id);
