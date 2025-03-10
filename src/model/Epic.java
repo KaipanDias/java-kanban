@@ -2,7 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
-public class Epic extends Task{
+public class Epic extends Task {
 
     private final ArrayList<Subtask> subtasks;
 
@@ -27,7 +27,7 @@ public class Epic extends Task{
 
     @Override
     public String toString() {
-        return "Epic{"  +
+        return "Epic{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +

@@ -26,7 +26,7 @@ class InMemoryHistoryManagerTest {
 
     public Task createTask() {
         currentIdOfTask++;
-        Task task = new Task(currentIdOfTask,"Task 1", "Task description 1");
+        Task task = new Task(currentIdOfTask, "Task 1", "Task description 1");
         inMemoryTaskManager.addNewTask(task);
         return task;
     }
@@ -40,7 +40,7 @@ class InMemoryHistoryManagerTest {
 
     public Subtask createSubTask(Epic epic) {
         currentIdOfTask++;
-        Subtask subTask = new Subtask(currentIdOfTask, "SubTask 1", "SubTask description 1", epic.getStatus(),epic.getId());
+        Subtask subTask = new Subtask(currentIdOfTask, "SubTask 1", "SubTask description 1", epic.getStatus(), epic.getId());
         inMemoryTaskManager.addNewSubtask(subTask);
 
         return subTask;
@@ -49,12 +49,17 @@ class InMemoryHistoryManagerTest {
     @Test
     public void should_add_task_to_history() {
         Task task = createTask();
+        Task task2 = createTask();
 
+
+        inMemoryTaskManager.getTaskById(task2.getId());
         inMemoryTaskManager.getTaskById(task.getId());
+        inMemoryTaskManager.getTaskById(task2.getId());
 
-
-        assertEquals(inMemoryHistoryManager.getHistory().getLast(), task, "Задача не попала в историю");
+        assertEquals(inMemoryTaskManager.getHistory().getLast(), task2, "Задача не попала в историю");
+        assertNotEquals(inMemoryTaskManager.getHistory().getFirst(), task2, "Неправильный порядок просмотра истории");
     }
+
 
     @Test
     public void should_add_epic_to_history() {
@@ -62,7 +67,8 @@ class InMemoryHistoryManagerTest {
 
         inMemoryTaskManager.getEpicById(epic.getId());
 
-        assertEquals(inMemoryHistoryManager.getHistory().getLast(), epic, "Задача не попала в историю");
+        inMemoryTaskManager.getHistory();
+        assertEquals(inMemoryTaskManager.getHistory().getLast(), epic, "Задача не попала в историю");
     }
 
     @Test
@@ -72,13 +78,18 @@ class InMemoryHistoryManagerTest {
 
         inMemoryTaskManager.getSubtaskById(subTask.getId());
 
-        assertEquals(inMemoryHistoryManager.getHistory().getLast(), subTask, "Задача не попала в историю");
+        assertEquals(inMemoryTaskManager.getHistory().getLast(), subTask, "Задача не попала в историю");
     }
 
     @Test
     public void should_add_task_to_last_and_delete_first() {
         Task task = createTask();
         Epic epic = createEpic();
+        ArrayList<Task> watchedHistory = new ArrayList<>();
+
+
+        watchedHistory.add(task);
+        watchedHistory.add(epic);
 
         for (int i = 0; i < 5; i++) {
             inMemoryTaskManager.getTaskById(task.getId());
@@ -87,9 +98,9 @@ class InMemoryHistoryManagerTest {
         inMemoryTaskManager.getEpicById(epic.getId());
 
 
-        assertEquals(inMemoryHistoryManager.getHistory().getLast(), epic, "Задача не попала в историю");
-        assertEquals(inMemoryHistoryManager.getHistory().getFirst(), epic, "Задача не попала в историю");
-        assertEquals(10, inMemoryHistoryManager.getHistory().toArray().length);
+        assertEquals(inMemoryTaskManager.getHistory().getLast(), epic, "Задача не попала в историю");
+        assertEquals(inMemoryTaskManager.getHistory().getFirst(), task, "Задача не попала в историю");
+        assertEquals(watchedHistory.size(), inMemoryTaskManager.getHistory().toArray().length);
     }
 
 
@@ -98,21 +109,54 @@ class InMemoryHistoryManagerTest {
         Task task = createTask();
         Epic epic = createEpic();
         Subtask subTask = createSubTask(epic);
-        ArrayList<Task> watchedHistory = new ArrayList<>(10);
+        ArrayList<Task> watchedHistory = new ArrayList<>();
 
-        for (int i = 0; i < 3; i++) {
+
+        for (int i = 0; i < 10; i++) {
             inMemoryTaskManager.getTaskById(task.getId());
             inMemoryTaskManager.getEpicById(epic.getId());
             inMemoryTaskManager.getSubtaskById(subTask.getId());
-            watchedHistory.add(task);
-            watchedHistory.add(epic);
-            watchedHistory.add(subTask);
         }
-
-        inMemoryTaskManager.getTaskById(task.getId());
         watchedHistory.add(task);
+        watchedHistory.add(epic);
+        watchedHistory.add(subTask);
 
-        assertArrayEquals(watchedHistory.toArray(), inMemoryHistoryManager.getHistory().toArray());
+        assertArrayEquals(watchedHistory.toArray(), inMemoryTaskManager.getHistory().toArray());
     }
 
+    @Test
+    public void shouldRemoveFromHistory() {
+        Task task1 = createTask();
+        Task task2 = createTask();
+        Epic epic = createEpic();
+        Subtask subtask = createSubTask(epic);
+
+        inMemoryHistoryManager.add(task1);
+        inMemoryHistoryManager.add(task2);
+        inMemoryHistoryManager.add(epic);
+        inMemoryHistoryManager.add(subtask);
+
+        inMemoryHistoryManager.remove(task1.getId());
+        inMemoryHistoryManager.remove(subtask.getId());
+        inMemoryHistoryManager.remove(epic.getId());
+
+        assertFalse(inMemoryTaskManager.getHistory().contains(task1));
+        assertFalse(inMemoryTaskManager.getHistory().contains(subtask));
+        assertFalse(inMemoryTaskManager.getHistory().contains(epic));
+    }
+
+    @Test
+    public void historyDoesNotContainsDuplicates() {
+        Task task = createTask();
+        Task task1 = createTask();
+        Task task2 = createTask();
+
+        inMemoryHistoryManager.add(task);
+        inMemoryHistoryManager.add(task1);
+        inMemoryHistoryManager.add(task2);
+        inMemoryHistoryManager.add(task);
+
+
+        assertEquals(3, inMemoryHistoryManager.getHistory().size());
+    }
 }
