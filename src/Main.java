@@ -1,13 +1,14 @@
 import managers.*;
-import model.Epic;
-import model.Status;
-import model.Subtask;
-import model.Task;
+import model.*;
+
+import java.io.*;
 
 public class Main {
 
     public static void main(String[] args) {
-        TaskManager taskManager = Managers.getDefault();
+        //TaskManager taskManager = Managers.getDefault();
+
+        FileBackedTaskManager taskManager = new FileBackedTaskManager(new File("tasks.csv"));
 
 
         Task task1 = new Task("Task 1", "Task 1 description", Status.NEW);
@@ -30,20 +31,26 @@ public class Main {
         taskManager.addNewSubtask(subtask3);
 
 
-        taskManager.getTaskById(task1.getId());
-        taskManager.getTaskById(task3.getId());
-        taskManager.getEpicById(epic2.getId());
-        taskManager.getTaskById(task1.getId());
-        taskManager.getEpicById(epic1.getId());
+        FileBackedTaskManager backedTaskManager = FileBackedTaskManager.loadFromFile(new File("tasks.csv"));
+        System.out.println(backedTaskManager.getTasks());
+        System.out.println(backedTaskManager.getSubtasks());
+        System.out.println(backedTaskManager.getEpics());
 
-        System.out.println(taskManager.getHistory());
 
-        taskManager.deleteTaskById(task3.getId());
-
-        System.out.println(taskManager.getHistory());
-
-        taskManager.deleteEpicById(epic1.getId());
-
-        System.out.println(taskManager.getHistory());
+//        taskManager.getTaskById(task1.getId());
+//        taskManager.getTaskById(task3.getId());
+//        taskManager.getEpicById(epic2.getId());
+//        taskManager.getTaskById(task1.getId());
+//        taskManager.getEpicById(epic1.getId());
+//
+//        System.out.println(taskManager.getHistory());
+//
+//        taskManager.deleteTaskById(task3.getId());
+//
+//        System.out.println(taskManager.getHistory());
+//
+//        taskManager.deleteEpicById(epic1.getId());
+//
+//        System.out.println(taskManager.getHistory());
     }
 }
