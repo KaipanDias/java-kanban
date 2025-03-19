@@ -6,7 +6,6 @@ import java.io.*;
 public class Main {
 
     public static void main(String[] args) {
-        //TaskManager taskManager = Managers.getDefault();
 
         FileBackedTaskManager taskManager = new FileBackedTaskManager(new File("tasks.csv"));
 
@@ -27,14 +26,15 @@ public class Main {
         taskManager.addNewSubtask(subtask1);
         Subtask subtask2 = new Subtask("Subtask 2", "Subtask 2 description", epic1.getId());
         taskManager.addNewSubtask(subtask2);
-        Subtask subtask3 = new Subtask("Subtask 3", "Subtask 3 description", epic1.getId());
+        Subtask subtask3 = new Subtask("Subtask 3", "Subtask 3 description", epic2.getId());
         taskManager.addNewSubtask(subtask3);
 
 
-        FileBackedTaskManager backedTaskManager = FileBackedTaskManager.loadFromFile(new File("tasks.csv"));
+        FileBackedTaskManager backedTaskManager = new FileBackedTaskManager(new File("tasks.csv"));
+        backedTaskManager = backedTaskManager.loadFromFile(new File("tasks.csv"));
         System.out.println(backedTaskManager.getTasks());
-        System.out.println(backedTaskManager.getSubtasks());
         System.out.println(backedTaskManager.getEpics());
+        System.out.println(backedTaskManager.getSubtasks());
 
 
 //        taskManager.getTaskById(task1.getId());

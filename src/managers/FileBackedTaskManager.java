@@ -6,10 +6,13 @@ import model.Task;
 
 import java.io.*;
 import java.nio.*;
+import java.util.ArrayList;
+import java.util.Map;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private final File file;
+    final String header = "id,type,name,status,description,epic\n";
 
     public FileBackedTaskManager(File file) {
         this.file = file;
@@ -17,7 +20,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private void save() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
-            bw.write("id,type,name,status,description,epic\n");
+            bw.write(header);
             for (Task task : getTasks()) {
                 bw.write(toStringCSV(task));
                 bw.newLine();
@@ -35,19 +38,27 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-    public static FileBackedTaskManager loadFromFile(File file) {
+    public FileBackedTaskManager loadFromFile(File file) {
         FileBackedTaskManager tm = new FileBackedTaskManager(file);
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             br.readLine();
             String line;
+
+
             while ((line = br.readLine()) != null) {
                 Task task = fromString(line);
                 if (task instanceof Epic) {
-                    tm.addNewEpic((Epic) task);
+                    tm.epics.put(task.getId(), (Epic) task);
                 } else if (task instanceof Subtask) {
-                    tm.addNewSubtask((Subtask) task);
+                    Subtask tmpSubtask = (Subtask) task;
+                    tm.subtasks.put(task.getId(), tmpSubtask);
+
+                    ArrayList<Subtask> epicSubtasks = tm.epics.get(tmpSubtask.getEpicId()).getSubtasks();
+                    epicSubtasks.add(tmpSubtask);
+                    updateEpicStatus(tm.epics.get(tmpSubtask.getEpicId()));
+
                 } else {
-                    tm.addNewTask(task);
+                    tm.tasks.put(task.getId(), task);
                 }
             }
         } catch (IOException e) {
@@ -57,7 +68,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         return tm;
     }
 
-    public static String toStringCSV(Task task) {
+    private String toStringCSV(Task task) {
         return task.getId() + "," +
                 TaskType.TASK + "," +
                 task.getName() + "," +
@@ -65,7 +76,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 task.getDescription() + ",";
     }
 
-    public static String toStringCSV(Subtask subtask) {
+    private String toStringCSV(Subtask subtask) {
         return subtask.getId() + "," +
                 TaskType.SUBTASK + "," +
                 subtask.getName() + "," +
@@ -74,7 +85,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 subtask.getEpicId() + ",";
     }
 
-    public static String toStringCSV(Epic epic) {
+    private String toStringCSV(Epic epic) {
         return epic.getId() + "," +
                 TaskType.EPIC + "," +
                 epic.getName() + "," +
@@ -82,23 +93,23 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 epic.getDescription() + ",";
     }
 
-    public static Task fromString(String value) {
+    private Task fromString(String value) {
         String[] values = value.split(",");
         String taskId = values[0];
         String taskType = values[1];
         String taskName = values[2];
-        String taskStatus = values[3];
+        Status taskStatus = Status.valueOf(values[3]);
         String taskDescription = values[4];
 
         switch (TaskType.valueOf(taskType)) {
             case TASK -> {
-                return new Task(taskName, taskDescription);
+                return new Task(Integer.parseInt(taskId), taskName, taskDescription, taskStatus);
             }
             case SUBTASK -> {
-                return new Subtask(taskName, taskDescription, Integer.parseInt(values[5]));
+                return new Subtask(Integer.parseInt(taskId), taskName, taskDescription, taskStatus, Integer.parseInt(values[5]));
             }
             case EPIC -> {
-                return new Epic(taskName, taskDescription);
+                return new Epic(Integer.parseInt(taskId), taskName, taskDescription, taskStatus);
             }
             default -> throw new ManagerSaveException("Такого типа задач нет" + taskType);
         }

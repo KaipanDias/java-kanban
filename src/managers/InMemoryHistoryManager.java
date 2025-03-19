@@ -54,17 +54,25 @@ public class InMemoryHistoryManager implements HistoryManager {
             final Node<Task> prev = node.prev;
             node.data = null;
 
-            if (head == node && tail == null) {
+            if (head == node && tail == node) { // Удаляем последний элемент списка
                 head = null;
-            } else if (head == node) {
+            } else if (head == node) { // Удаляем головной элемент
                 head = next;
-                head.prev = null;
-            } else if (tail == node) {
+                if (head != null) { // Проверка, чтобы избежать NullPointerException
+                    head.prev = null;
+                }
+            } else if (tail == node) { // Удаляем хвостовой элемент
                 tail = prev;
-                tail.next = null;
-            } else {
-                prev.next = next;
-                next.prev = prev;
+                if (tail != null) { // Проверка, чтобы избежать NullPointerException
+                    tail.next = null;
+                }
+            } else { // Удаляем средний элемент
+                if (prev != null) {
+                    prev.next = next;
+                }
+                if (next != null) {
+                    next.prev = prev;
+                }
             }
         }
     }
