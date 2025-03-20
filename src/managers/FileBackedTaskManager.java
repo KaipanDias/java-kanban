@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private final File file;
-    final String header = "id,type,name,status,description,epic\n";
+    private static final String HEADER = "id,type,name,status,description,epic\n";
 
     public FileBackedTaskManager(File file) {
         this.file = file;
@@ -19,7 +19,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private void save() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
-            bw.write(header);
+            bw.write(HEADER);
             for (Task task : getTasks()) {
                 bw.write(toStringCSV(task));
                 bw.newLine();
@@ -42,10 +42,13 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             br.readLine();
             String line;
-
+            int maxTasksId = 0;
 
             while ((line = br.readLine()) != null) {
                 Task task = fromString(line);
+                if (task.getId() > maxTasksId) {
+                    maxTasksId = task.getId();
+                }
                 if (task instanceof Epic) {
                     tm.epics.put(task.getId(), (Epic) task);
                 } else if (task instanceof Subtask) {
@@ -54,12 +57,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
                     ArrayList<Subtask> epicSubtasks = tm.epics.get(tmpSubtask.getEpicId()).getSubtasks();
                     epicSubtasks.add(tmpSubtask);
-                    updateEpicStatus(tm.epics.get(tmpSubtask.getEpicId()));
-
                 } else {
                     tm.tasks.put(task.getId(), task);
                 }
             }
+
+            tm.id = maxTasksId;
         } catch (IOException e) {
             throw new ManagerSaveException("Ошибка при чтений файла: " + e.getMessage());
         }
