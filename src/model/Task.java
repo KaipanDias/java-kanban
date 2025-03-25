@@ -1,18 +1,21 @@
 package model;
 
 import java.util.Objects;
+import java.time.*;
 
 public class Task {
     protected int id;
     protected String name;
     protected String description;
     protected Status status;
-
+    protected Duration duration;
+    protected LocalDateTime startTime;
 
     public Task(String name, String description, Status status) {
         this.name = name;
         this.description = description;
         this.status = status;
+        this.duration = Duration.ofMinutes(0);
     }
 
     public Task(int id, String name, String description) {
@@ -20,6 +23,7 @@ public class Task {
         this.name = name;
         this.description = description;
         this.status = Status.NEW;
+        this.duration = Duration.ofMinutes(0);
     }
 
     public Task(int id, String name, String description, Status status) {
@@ -27,12 +31,22 @@ public class Task {
         this.name = name;
         this.description = description;
         this.status = status;
+        this.duration = Duration.ofMinutes(0);
     }
 
     public Task(String name, String description) {
         this.name = name;
         this.description = description;
         this.status = Status.NEW;
+        this.duration = Duration.ofMinutes(0);
+    }
+
+    public Task(String name, String description, Duration duration, LocalDateTime startTime) {
+        this.name = name;
+        this.description = description;
+        this.status = Status.NEW;
+        this.duration = duration;
+        this.startTime = startTime;
     }
 
     public int getId() {
@@ -87,6 +101,20 @@ public class Task {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", status=" + status +
+                ", startTime=" + startTime +
+                ", duration=" + duration +
                 '}';
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public LocalDateTime getEndTime(){
+        return startTime.plus(duration);
     }
 }
