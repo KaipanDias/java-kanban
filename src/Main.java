@@ -3,6 +3,9 @@ import model.*;
 
 import java.io.*;
 
+import java.time.*;
+import java.time.format.*;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -32,17 +35,28 @@ public class Main {
 
         FileBackedTaskManager backedTaskManager = new FileBackedTaskManager(new File("tasks.csv"));
         backedTaskManager = backedTaskManager.loadFromFile(new File("tasks.csv"));
-        System.out.println(backedTaskManager.getTasks());
-        System.out.println(backedTaskManager.getEpics());
-        System.out.println(backedTaskManager.getSubtasks());
+//        System.out.println(backedTaskManager.getTasks());
+//        System.out.println(backedTaskManager.getEpics());
+//        System.out.println(backedTaskManager.getSubtasks());
 
+        DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm dd.MM.yy");
+        LocalDateTime firstTime = LocalDateTime.parse("07:13 23.02.25", DATE_TIME_FORMATTER);
+        LocalDateTime secondTime = LocalDateTime.parse("11:00 23.02.25", DATE_TIME_FORMATTER);
+        LocalDateTime thirdTime = LocalDateTime.parse("22:46 23.02.24", DATE_TIME_FORMATTER);
+        task1.setStartTime(firstTime);
+        task2.setStartTime(secondTime);
+        task3.setStartTime(thirdTime);
+        taskManager.updateTask(task1);
+        taskManager.updateTask(task2);
+        taskManager.updateTask(task3);
 
+        System.out.println(taskManager.getPrioritizedTasks());
 //        taskManager.getTaskById(task1.getId());
 //        taskManager.getTaskById(task3.getId());
 //        taskManager.getEpicById(epic2.getId());
 //        taskManager.getTaskById(task1.getId());
 //        taskManager.getEpicById(epic1.getId());
-//
+// q
 //        System.out.println(taskManager.getHistory());
 //
 //        taskManager.deleteTaskById(task3.getId());

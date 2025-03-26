@@ -117,4 +117,12 @@ public class Task {
     public LocalDateTime getEndTime(){
         return startTime.plus(duration);
     }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
 }
