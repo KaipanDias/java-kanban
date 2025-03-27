@@ -47,7 +47,7 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    public void should_add_task_to_history() {
+    public void addTaskToHistoryTest() {
         Task task = createTask();
         Task task2 = createTask();
 
@@ -62,7 +62,7 @@ class InMemoryHistoryManagerTest {
 
 
     @Test
-    public void should_add_epic_to_history() {
+    public void addEpicToHistoryTest() {
         Epic epic = createEpic();
 
         inMemoryTaskManager.getEpicById(epic.getId());
@@ -72,7 +72,7 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    public void should_add_subtask_to_history() {
+    public void addSubTaskToHistoryTest() {
         Epic epic = createEpic();
         Subtask subTask = createSubTask(epic);
 
@@ -82,7 +82,7 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    public void should_add_task_to_last_and_delete_first() {
+    public void addTaskToLastAndDeleteFirstTest() {
         Task task = createTask();
         Epic epic = createEpic();
         ArrayList<Task> watchedHistory = new ArrayList<>();
@@ -105,7 +105,7 @@ class InMemoryHistoryManagerTest {
 
 
     @Test
-    public void should_add_all_tasks_to_history() {
+    public void addAllTaskToHistoryTest() {
         Task task = createTask();
         Epic epic = createEpic();
         Subtask subTask = createSubTask(epic);
@@ -125,7 +125,7 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    public void shouldRemoveFromHistory() {
+    public void removeFromHistoryTest() {
         Task task1 = createTask();
         Task task2 = createTask();
         Epic epic = createEpic();
@@ -146,7 +146,7 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    public void historyDoesNotContainsDuplicates() {
+    public void historyDoesNotContainsDuplicatesTest() {
         Task task = createTask();
         Task task1 = createTask();
         Task task2 = createTask();
