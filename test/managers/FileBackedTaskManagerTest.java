@@ -12,7 +12,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-class FileBackedTaskManagerTest {
+class FileBackedTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     @Test
     public void saveAndLoadEmptyFile() throws IOException {
         File testFile = File.createTempFile("testFile", ".csv");
@@ -74,6 +74,10 @@ class FileBackedTaskManagerTest {
         assertEquals(subtask.getStatus(), loadedFromFileSubtask.getStatus());
         assertEquals(subtask.getEpicId(), loadedFromFileSubtask.getEpicId());
 
+
+        //Проверка на восстановление PrioritizedTasks
+        assertEquals(taskManager1.getPrioritizedTasks(), taskManager.getPrioritizedTasks());
+
     }
 
     @Test
@@ -120,6 +124,7 @@ class FileBackedTaskManagerTest {
         assertEquals(epic.getStatus(), loadedFromFileEpic.getStatus());
         assertEquals(epic.getStartTime(), loadedFromFileEpic.getStartTime());
         assertEquals(epic.getDuration(), loadedFromFileEpic.getDuration());
+        assertEquals(epic.getEndTime(), loadedFromFileEpic.getEndTime());
 
         assertEquals(epic.getSubtasks().getFirst().getId(), loadedFromFileEpic.getSubtasks().getFirst().getId());
         assertEquals(epic.getSubtasks().getFirst().getName(), loadedFromFileEpic.getSubtasks().getFirst().getName());
@@ -138,5 +143,10 @@ class FileBackedTaskManagerTest {
         assertEquals(subtask.getStartTime(), loadedFromFileSubtask.getStartTime());
         assertEquals(subtask.getDuration(), loadedFromFileSubtask.getDuration());
 
+    }
+
+    @Override
+    public void getTaskManager() {
+        new InMemoryTaskManagerTest();
     }
 }

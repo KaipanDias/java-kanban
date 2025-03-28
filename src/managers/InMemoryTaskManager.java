@@ -212,8 +212,11 @@ public class InMemoryTaskManager implements TaskManager {
                     tasks.put(task.getId(), task);
                 } else {
                     System.out.println("Задача " + task.getName() + "  пересекается с существующей");
+                    return;
                 }
             }
+
+            prioritizedTasks.remove(task);
             tasks.put(task.getId(), task);
         }
     }
@@ -237,6 +240,7 @@ public class InMemoryTaskManager implements TaskManager {
                 subtasks.put(subtask.getId(), subtask);
             } else {
                 System.out.println("Подзадача " + subtask.getName() + "  пересекается с существующей");
+                return;
             }
 
             Epic epic = epics.get(subtask.getEpicId()); // получение эпика сабтаска
@@ -253,6 +257,7 @@ public class InMemoryTaskManager implements TaskManager {
         epic.getSubtasks().add(subtask);
         updateEpicStatus(epic);
 
+        prioritizedTasks.remove(subtask);
         subtasks.put(subtask.getId(), subtask);
     }
 

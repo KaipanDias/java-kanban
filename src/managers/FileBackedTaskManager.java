@@ -64,6 +64,17 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 }
             }
 
+
+            tm.getEpics().stream()
+                    .forEach(tm::updateEpicStatus);
+            tm.getTasks().stream()
+                    .filter(task -> task.getStartTime() != null)
+                    .forEach(tm.prioritizedTasks::add);
+
+            tm.getSubtasks().stream()
+                    .filter(subtask -> subtask.getStartTime() != null)
+                    .forEach(tm.prioritizedTasks::add);
+
             tm.id = maxTasksId;
         } catch (IOException e) {
             throw new ManagerSaveException("Ошибка при чтений файла: " + e.getMessage());
