@@ -3,6 +3,7 @@ package managers;
 import model.Epic;
 import model.Subtask;
 import model.Task;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -12,12 +13,24 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-class FileBackedTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
+class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
+
+    private File testFile;
+
+    @Override
+    public FileBackedTaskManager getTaskManager() {
+        return new FileBackedTaskManager(testFile);
+    }
+
+    @BeforeEach
+    public void setUp() throws IOException {
+        testFile = File.createTempFile("testFile", ".csv");
+        testFile.deleteOnExit();
+        taskManager = getTaskManager();
+    }
+
     @Test
     public void saveAndLoadEmptyFile() throws IOException {
-        File testFile = File.createTempFile("testFile", ".csv");
-        testFile.deleteOnExit();
-        FileBackedTaskManager taskManager = new FileBackedTaskManager(testFile);
 
         assertEquals(0, taskManager.getTasks().size());
         assertEquals(0, taskManager.getSubtasks().size());
@@ -26,9 +39,6 @@ class FileBackedTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
 
     @Test
     public void testSaveAndGetTasks() throws IOException {
-        File testFile = File.createTempFile("testFile", ".csv");
-        testFile.deleteOnExit();
-        FileBackedTaskManager taskManager = new FileBackedTaskManager(testFile);
 
         Task task1 = new Task("Task name", "Task description");
 
@@ -83,9 +93,6 @@ class FileBackedTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     @Test
     public void testSaveAndGetWithTime() throws IOException {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
-        File testFile = File.createTempFile("testFile", ".csv");
-        testFile.deleteOnExit();
-        FileBackedTaskManager taskManager = new FileBackedTaskManager(testFile);
 
         Task task1 = new Task("Task name", "Task description");
         task1.setStartTime(LocalDateTime.parse("28.03.2025 00:01", formatter));
@@ -143,10 +150,5 @@ class FileBackedTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
         assertEquals(subtask.getStartTime(), loadedFromFileSubtask.getStartTime());
         assertEquals(subtask.getDuration(), loadedFromFileSubtask.getDuration());
 
-    }
-
-    @Override
-    public void getTaskManager() {
-        new InMemoryTaskManagerTest();
     }
 }

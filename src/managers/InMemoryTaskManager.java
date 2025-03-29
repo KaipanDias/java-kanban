@@ -138,7 +138,7 @@ public class InMemoryTaskManager implements TaskManager {
         epic.getSubtasks().stream()
                 .map(Subtask::getId)
                 .forEach(subtaskId -> {
-                    prioritizedTasks.remove(subtaskId);
+                    prioritizedTasks.remove(subtasks.get(subtaskId));
                     subtasks.remove(subtaskId);
                     historyManager.remove(subtaskId);
                 });
@@ -317,7 +317,7 @@ public class InMemoryTaskManager implements TaskManager {
         } else {
             return getPrioritizedTasks()
                     .stream()
-                    .filter(prioritizedTasks -> prioritizedTasks != task)
+                    .filter(prioritizedTasks -> !prioritizedTasks.equals(task))
                     .noneMatch(prioritizedTasks -> isTasksCross(prioritizedTasks, task));
         }
     }

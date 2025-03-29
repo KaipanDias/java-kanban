@@ -6,12 +6,12 @@ import org.junit.jupiter.api.BeforeEach;
 class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
 
     @Override
-    public void getTaskManager() {
-        new InMemoryTaskManager();
+    public InMemoryTaskManager getTaskManager() {
+        return new InMemoryTaskManager();
     }
 
     @BeforeEach
-    void setUp() {
-        getTaskManager();
+    public void setUp() {
+        taskManager = getTaskManager();
     }
 }
