@@ -1,38 +1,73 @@
 package model;
 
 import java.util.Objects;
+import java.time.*;
 
 public class Task {
     protected int id;
+
+    public TaskType getTaskType() {
+        return taskType;
+    }
+
+    protected TaskType taskType;
     protected String name;
     protected String description;
     protected Status status;
-
+    protected Duration duration;
+    protected LocalDateTime startTime;
 
     public Task(String name, String description, Status status) {
+        this.taskType = TaskType.TASK;
         this.name = name;
         this.description = description;
         this.status = status;
+        this.duration = Duration.ofMinutes(0);
     }
 
     public Task(int id, String name, String description) {
         this.id = id;
+        this.taskType = TaskType.TASK;
         this.name = name;
         this.description = description;
         this.status = Status.NEW;
+        this.duration = Duration.ofMinutes(0);
     }
 
     public Task(int id, String name, String description, Status status) {
         this.id = id;
+        this.taskType = TaskType.TASK;
         this.name = name;
         this.description = description;
         this.status = status;
+        this.duration = Duration.ofMinutes(0);
     }
 
     public Task(String name, String description) {
         this.name = name;
+        this.taskType = TaskType.TASK;
         this.description = description;
         this.status = Status.NEW;
+        this.duration = Duration.ofMinutes(0);
+    }
+
+    public Task(String name, String description, Duration duration, LocalDateTime startTime) {
+        this.name = name;
+        this.taskType = TaskType.TASK;
+        this.description = description;
+        this.status = Status.NEW;
+        this.duration = duration;
+        this.startTime = startTime;
+    }
+
+    public Task(int id, String name, String description, Status status, Duration duration, LocalDateTime startTime) {
+        this.id = id;
+        this.taskType = TaskType.TASK;
+        this.name = name;
+        this.description = description;
+        this.status = status;
+        this.duration = duration;
+        this.startTime = startTime;
     }
 
     public int getId() {
@@ -87,6 +122,28 @@ public class Task {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", status=" + status +
+                ", startTime=" + startTime +
+                ", duration=" + duration +
                 '}';
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return startTime.plus(duration);
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
     }
 }

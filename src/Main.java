@@ -3,12 +3,14 @@ import model.*;
 
 import java.io.*;
 
+import java.time.*;
+import java.time.format.*;
+
 public class Main {
 
     public static void main(String[] args) {
 
         FileBackedTaskManager taskManager = new FileBackedTaskManager(new File("tasks.csv"));
-
 
         Task task1 = new Task("Task 1", "Task 1 description", Status.NEW);
         taskManager.addNewTask(task1);
@@ -30,27 +32,23 @@ public class Main {
         taskManager.addNewSubtask(subtask3);
 
 
-        FileBackedTaskManager backedTaskManager = new FileBackedTaskManager(new File("tasks.csv"));
-        backedTaskManager = backedTaskManager.loadFromFile(new File("tasks.csv"));
-        System.out.println(backedTaskManager.getTasks());
-        System.out.println(backedTaskManager.getEpics());
-        System.out.println(backedTaskManager.getSubtasks());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd.MM.yy");
+        LocalDateTime firstTime = LocalDateTime.parse("07:14 23.02.25", formatter);
+        LocalDateTime secondTime = LocalDateTime.parse("11:00 27.02.25", formatter);
+        LocalDateTime thirdTime = LocalDateTime.parse("08:19 23.02.25", formatter);
 
+        task1.setStartTime(firstTime);
+        task1.setDuration(Duration.ofMinutes(30));
+        taskManager.updateTask(task1);
 
-//        taskManager.getTaskById(task1.getId());
-//        taskManager.getTaskById(task3.getId());
-//        taskManager.getEpicById(epic2.getId());
-//        taskManager.getTaskById(task1.getId());
-//        taskManager.getEpicById(epic1.getId());
-//
-//        System.out.println(taskManager.getHistory());
-//
-//        taskManager.deleteTaskById(task3.getId());
-//
-//        System.out.println(taskManager.getHistory());
-//
-//        taskManager.deleteEpicById(epic1.getId());
-//
-//        System.out.println(taskManager.getHistory());
+        task2.setStartTime(secondTime);
+        task2.setDuration(Duration.ofMinutes(360));
+        taskManager.updateTask(task2);
+
+        task3.setStartTime(thirdTime);
+        task3.setDuration(Duration.ofMinutes(10));
+        taskManager.updateTask(task3);
+
+        System.out.println(taskManager.getPrioritizedTasks());
     }
 }
