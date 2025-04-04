@@ -1,6 +1,6 @@
 import managers.*;
 import model.*;
-
+import com.google.gson.Gson;
 import java.io.*;
 
 import java.time.*;
@@ -49,6 +49,8 @@ public class Main {
         task3.setDuration(Duration.ofMinutes(10));
         taskManager.updateTask(task3);
 
-        System.out.println(taskManager.getPrioritizedTasks());
+        System.out.println(taskManager.getTasks());
+
+
     }
 }
