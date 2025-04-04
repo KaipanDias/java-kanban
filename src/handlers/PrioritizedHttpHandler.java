@@ -13,7 +13,11 @@ public class PrioritizedHttpHandler  extends BaseHttpHandler implements HttpHand
     }
 
     @Override
-    public void handle(HttpExchange exchange) throws IOException {
-
+    public void handle(HttpExchange httpExchange) throws IOException {
+        if (httpExchange.getRequestMethod().equals("GET")){
+            sendText(httpExchange, gson.toJson(taskManager.getPrioritizedTasks()));
+        }else{
+            sendNotFound(httpExchange, "Такого метода нет");
+        }
     }
 }

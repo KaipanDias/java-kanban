@@ -19,7 +19,6 @@ public class TaskHttpHandler  extends BaseHttpHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-
         switch (httpExchange.getRequestMethod()) {
             case "GET":
                 handleGet(httpExchange);

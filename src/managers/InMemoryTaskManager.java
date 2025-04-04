@@ -180,7 +180,7 @@ public class InMemoryTaskManager implements TaskManager {
                     return id;
                 } else {
                     System.out.println("Подзадача " + subtask.getName() + "  пересекается с существующей");
-                    return null;
+                    return 0;
                 }
             }
             subtask.setId(++id);

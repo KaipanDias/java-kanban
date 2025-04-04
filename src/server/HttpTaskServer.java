@@ -34,13 +34,12 @@ public class HttpTaskServer {
     private void start() {
         try {
             Gson gson = getGson();
-            httpServer = HttpServer.create();
-            httpServer.bind(new InetSocketAddress(PORT), 0);
+            httpServer = HttpServer.create(new InetSocketAddress(PORT), 0);
             httpServer.createContext("/tasks", new TaskHttpHandler(taskManager, gson));
-//            httpServer.createContext("/subtasks", new SubtaskHttpHandler(taskManager, gson));
-//            httpServer.createContext("/epics", new EpicHttpHandler(taskManager, gson));
-//            httpServer.createContext("/history", new HistoryHttpHandler(taskManager, gson));
-//            httpServer.createContext("/prioritized", new PrioritizedHttpHandler(taskManager, gson));
+            httpServer.createContext("/subtasks", new SubtaskHttpHandler(taskManager, gson));
+            httpServer.createContext("/epics", new EpicHttpHandler(taskManager, gson));
+            httpServer.createContext("/history", new HistoryHttpHandler(taskManager, gson));
+            httpServer.createContext("/prioritized", new PrioritizedHttpHandler(taskManager, gson));
             httpServer.start();
             System.out.println("Сервер запущен на http://localhost:8080/");
         }catch (IOException e){
