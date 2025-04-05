@@ -5,7 +5,6 @@ import adapters.LocalDateTimeAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpServer;
-import com.sun.net.httpserver.HttpsServer;
 import handlers.*;
 import managers.Managers;
 import managers.TaskManager;
@@ -24,14 +23,14 @@ public class HttpTaskServer {
         this.taskManager = taskManager;
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         TaskManager taskManager = Managers.getDefault();
 
         HttpTaskServer taskServer = new HttpTaskServer(taskManager);
         taskServer.start();
     }
 
-    private void start() {
+    public void start() {
         try {
             Gson gson = getGson();
             httpServer = HttpServer.create(new InetSocketAddress(PORT), 0);
@@ -42,16 +41,16 @@ public class HttpTaskServer {
             httpServer.createContext("/prioritized", new PrioritizedHttpHandler(taskManager, gson));
             httpServer.start();
             System.out.println("Сервер запущен на http://localhost:8080/");
-        }catch (IOException e){
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private void stop(){
+    public void stop() {
         httpServer.stop(0);
     }
 
-    public static Gson getGson(){
+    public static Gson getGson() {
         return new GsonBuilder()
                 .setPrettyPrinting()
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())

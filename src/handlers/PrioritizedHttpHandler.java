@@ -7,16 +7,16 @@ import managers.TaskManager;
 
 import java.io.IOException;
 
-public class PrioritizedHttpHandler  extends BaseHttpHandler implements HttpHandler {
+public class PrioritizedHttpHandler extends BaseHttpHandler implements HttpHandler {
     public PrioritizedHttpHandler(TaskManager taskManager, Gson gson) {
         super(taskManager, gson);
     }
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        if (httpExchange.getRequestMethod().equals("GET")){
+        if (httpExchange.getRequestMethod().equals("GET")) {
             sendText(httpExchange, gson.toJson(taskManager.getPrioritizedTasks()));
-        }else{
+        } else {
             sendNotFound(httpExchange, "Такого метода нет");
         }
     }

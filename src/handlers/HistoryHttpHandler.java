@@ -7,16 +7,16 @@ import managers.TaskManager;
 
 import java.io.IOException;
 
-public class HistoryHttpHandler  extends BaseHttpHandler implements HttpHandler {
+public class HistoryHttpHandler extends BaseHttpHandler implements HttpHandler {
     public HistoryHttpHandler(TaskManager taskManager, Gson gson) {
         super(taskManager, gson);
     }
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        if (httpExchange.getRequestMethod().equals("GET")){
+        if (httpExchange.getRequestMethod().equals("GET")) {
             sendText(httpExchange, gson.toJson(taskManager.getHistory()));
-        }else{
+        } else {
             sendNotFound(httpExchange, "Такого метода нет");
         }
     }

@@ -19,15 +19,15 @@ abstract class BaseHttpHandler {
 
     protected void sendText(HttpExchange httpExchange, String text) throws IOException {
         byte[] response = text.getBytes(StandardCharsets.UTF_8);
-        httpExchange.getResponseHeaders().add("Content-Type","application/json;charset=utf-8");
-        httpExchange.sendResponseHeaders(200,response.length);
+        httpExchange.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
+        httpExchange.sendResponseHeaders(200, response.length);
         httpExchange.getResponseBody().write(response);
         httpExchange.close();
     }
 
-    protected void sendNotFound(HttpExchange httpExchange, String text) throws IOException{
+    protected void sendNotFound(HttpExchange httpExchange, String text) throws IOException {
         byte[] response = text.getBytes(StandardCharsets.UTF_8);
-        httpExchange.getResponseHeaders().add("Content-Type","application/json;charset=utf-8");
+        httpExchange.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
         httpExchange.sendResponseHeaders(404, response.length);
         httpExchange.getResponseBody().write(response);
         httpExchange.close();
@@ -35,7 +35,7 @@ abstract class BaseHttpHandler {
 
     protected void sendHasInteractions(HttpExchange httpExchange) throws IOException {
         byte[] response = "Задача пересекается с существующими".getBytes(StandardCharsets.UTF_8);
-        httpExchange.getResponseHeaders().add("Content-Type","application/json;charset=utf-8");
+        httpExchange.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
         httpExchange.sendResponseHeaders(406, response.length);
         httpExchange.getResponseBody().write(response);
         httpExchange.close();
@@ -43,7 +43,7 @@ abstract class BaseHttpHandler {
 
     protected void sendMessage(HttpExchange httpExchange, String text, int statusCode) throws IOException {
         byte[] response = text.getBytes(StandardCharsets.UTF_8);
-        httpExchange.getResponseHeaders().add("Content-Type","application/json;charset=utf-8");
+        httpExchange.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
         httpExchange.sendResponseHeaders(statusCode, response.length);
         httpExchange.getResponseBody().write(response);
         httpExchange.close();

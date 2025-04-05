@@ -3,12 +3,15 @@ package handlers;
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import exceptions.HasInteractionsException;
+import exceptions.NotFoundException;
 import managers.TaskManager;
 import model.Epic;
 import model.Subtask;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -50,19 +53,21 @@ public class EpicHttpHandler extends BaseHttpHandler implements HttpHandler {
             System.out.println(response);
         } else if (epicMatcher.matches()) {
             int id = Integer.parseInt(epicMatcher.group(1));
-            if (taskManager.getEpicById(id) != null) {
-                response = gson.toJson(taskManager.getEpicById(id));
+            try {
+                Epic epic = taskManager.getEpicById(id);
+                response = gson.toJson(epic);
                 sendText(httpExchange, response);
-            } else {
-                sendNotFound(httpExchange, "Подзадача с таким ID не найдена");
+            } catch (NotFoundException e) {
+                sendNotFound(httpExchange, e.getMessage());
             }
         } else if (epicSubtasksMatcher.matches()) {
             int id = Integer.parseInt(epicSubtasksMatcher.group(1));
-            if (taskManager.getEpicById(id) != null) {
-                response = gson.toJson(taskManager.getEpicById(id).getSubtasks());
+            try {
+                ArrayList<Subtask> subtasks = taskManager.getEpicById(id).getSubtasks();
+                response = gson.toJson(subtasks);
                 sendText(httpExchange, response);
-            } else {
-                sendNotFound(httpExchange, "Подзадача с таким ID не найдена");
+            } catch (NotFoundException e) {
+                sendNotFound(httpExchange, e.getMessage());
             }
         } else {
             sendNotFound(httpExchange, "Такого пути нет");
@@ -80,12 +85,11 @@ public class EpicHttpHandler extends BaseHttpHandler implements HttpHandler {
             return;
         }
         if (path.matches("/epics")) {
-            int newTaskId = taskManager.addNewEpic(epic);
-
-            if (newTaskId == 0) {
-                sendMessage(httpExchange, "Задача пересекается с существуещей", 406);
-            } else {
+            try {
+                taskManager.addNewEpic(epic);
                 sendMessage(httpExchange, "Задача успешно добавлена", 201);
+            } catch (HasInteractionsException e) {
+                sendMessage(httpExchange, e.getMessage(), 406);
             }
         } else {
             sendNotFound(httpExchange, "Такого пути нет");
@@ -96,10 +100,8 @@ public class EpicHttpHandler extends BaseHttpHandler implements HttpHandler {
         String path = httpExchange.getRequestURI().getPath();
 
         Pattern epicPattern = Pattern.compile("^/epics/(\\d+)$");
-        Pattern subtasksPattern = Pattern.compile("^/epics/(\\d+)/subtasks$");
 
         Matcher epicMatcher = epicPattern.matcher(path);
-        Matcher epicSubtasksMatcher = subtasksPattern.matcher(path);
 
         if (path.matches("/epics")) {
             taskManager.deleteAllEpics();

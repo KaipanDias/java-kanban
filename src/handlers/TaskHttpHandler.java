@@ -3,8 +3,9 @@ package handlers;
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import exceptions.HasInteractionsException;
+import exceptions.NotFoundException;
 import managers.TaskManager;
-import model.Status;
 import model.Task;
 
 import java.io.IOException;
@@ -12,7 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class TaskHttpHandler  extends BaseHttpHandler implements HttpHandler {
+public class TaskHttpHandler extends BaseHttpHandler implements HttpHandler {
     public TaskHttpHandler(TaskManager taskManager, Gson gson) {
         super(taskManager, gson);
     }
@@ -48,11 +49,12 @@ public class TaskHttpHandler  extends BaseHttpHandler implements HttpHandler {
             System.out.println(response);
         } else if (taskMatcher.matches()) {
             int id = Integer.parseInt(taskMatcher.group(1));
-            if (taskManager.getTaskById(id) != null){
-                response = gson.toJson(taskManager.getTaskById(id));
+            try {
+                Task task = taskManager.getTaskById(id);
+                response = gson.toJson(task);
                 sendText(httpExchange, response);
-            }else{
-                sendNotFound(httpExchange, "Задача с таким ID не найдена");
+            } catch (NotFoundException e) {
+                sendNotFound(httpExchange, e.getMessage());
             }
         } else {
             sendNotFound(httpExchange, "Такого пути нет");
@@ -65,23 +67,25 @@ public class TaskHttpHandler  extends BaseHttpHandler implements HttpHandler {
         String requestBody = new String(httpExchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
         Task task = gson.fromJson(requestBody, Task.class);
 
-        if (task == null){
+        if (task == null) {
             sendMessage(httpExchange, "Тело запроса пустое", 400);
             return;
         }
         if (path.matches("/tasks")) {
             int id = task.getId();
-
-            if (id != 0){
-                taskManager.updateTask(task);
-                sendMessage(httpExchange, "Задача успешно обновлена", 201);
-            }else{
-                int newTaskId = taskManager.addNewTask(task);
-
-                if(newTaskId == 0){
-                    sendMessage(httpExchange, "Задача пересекается с существуещей", 406);
-                }else {
-                    sendMessage(httpExchange,"Задача успешно добавлена", 201);
+            if (id != 0) {
+                try {
+                    taskManager.updateTask(task);
+                    sendMessage(httpExchange, "Задача успешно обновлена", 201);
+                } catch (HasInteractionsException e) {
+                    sendMessage(httpExchange, e.getMessage(), 406);
+                }
+            } else {
+                try {
+                    taskManager.addNewTask(task);
+                    sendMessage(httpExchange, "Задача успешно добавлена", 201);
+                } catch (HasInteractionsException e) {
+                    sendMessage(httpExchange, e.getMessage(), 406);
                 }
             }
         } else {
@@ -100,11 +104,11 @@ public class TaskHttpHandler  extends BaseHttpHandler implements HttpHandler {
             sendText(httpExchange, "Все задачи удалены");
         } else if (taskMatcher.matches()) {
             int id = Integer.parseInt(taskMatcher.group(1));
-            if (taskManager.getTaskById(id) != null){
+            try {
                 taskManager.deleteTaskById(id);
                 sendText(httpExchange, "Задача удалена");
-            }else{
-                sendNotFound(httpExchange, "Задача с таким ID не найдена");
+            } catch (NotFoundException e) {
+                sendNotFound(httpExchange, e.getMessage());
             }
         } else {
             sendNotFound(httpExchange, "Такого пути нет");
