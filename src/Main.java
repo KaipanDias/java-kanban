@@ -50,5 +50,9 @@ public class Main {
         taskManager.updateTask(task3);
 
         System.out.println(taskManager.getPrioritizedTasks());
+        System.out.println(taskManager.getHistory());
+        taskManager.getTaskById(task1.getId());
+        taskManager.getTaskById(task2.getId());
+        System.out.println(taskManager.getHistory());
     }
 }
