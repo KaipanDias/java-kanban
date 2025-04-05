@@ -20,6 +20,6 @@ public class DurationAdapter extends TypeAdapter<Duration> {
 
     @Override
     public Duration read(JsonReader jsonReader) throws IOException {
-        return Duration.ofSeconds(Long.parseLong(jsonReader.nextString()));
+        return Duration.ofSeconds(jsonReader.nextLong());
     }
 }

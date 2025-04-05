@@ -2,7 +2,6 @@ package handlers;
 
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import exceptions.HasInteractionsException;
 import exceptions.NotFoundException;
 import managers.TaskManager;
@@ -13,7 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SubtaskHttpHandler extends BaseHttpHandler implements HttpHandler {
+public class SubtaskHttpHandler extends BaseHttpHandler {
     public SubtaskHttpHandler(TaskManager taskManager, Gson gson) {
         super(taskManager, gson);
     }

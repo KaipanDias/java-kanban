@@ -2,7 +2,6 @@ package handlers;
 
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import exceptions.HasInteractionsException;
 import exceptions.NotFoundException;
 import managers.TaskManager;
@@ -15,7 +14,7 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class EpicHttpHandler extends BaseHttpHandler implements HttpHandler {
+public class EpicHttpHandler extends BaseHttpHandler {
     public EpicHttpHandler(TaskManager taskManager, Gson gson) {
         super(taskManager, gson);
     }

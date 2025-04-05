@@ -2,12 +2,11 @@ package handlers;
 
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import managers.TaskManager;
 
 import java.io.IOException;
 
-public class HistoryHttpHandler extends BaseHttpHandler implements HttpHandler {
+public class HistoryHttpHandler extends BaseHttpHandler {
     public HistoryHttpHandler(TaskManager taskManager, Gson gson) {
         super(taskManager, gson);
     }
